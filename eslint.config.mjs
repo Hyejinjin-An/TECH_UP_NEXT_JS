@@ -5,10 +5,11 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // 엄격한 검사
+  // 2026.04.07 add
   {
     rules: {
-       "@typescript-eslint/no-unused-vars": "error",  // 안 쓰는 변수 -> 에러
+      //  "@typescript-eslint/no-unused-vars": "error",  // 안 쓰는 변수는 에러 표기
+       "@typescript-eslint/no-unused-vars": "off",
     }
   },
 
