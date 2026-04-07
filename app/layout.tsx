@@ -31,7 +31,7 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       {/* className="dark" 추가하면 다크모드 적용 */}
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="dark min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
