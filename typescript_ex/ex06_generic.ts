@@ -59,6 +59,7 @@ function Test()
 function TestEx()
 {
     const [pokemonList, setPokemonList] = useState<string[]>(["피카츄", "라이츄", "파이리"])
-    // 리터럴 타입으로도 가능한지?
-    // TODO
+    // TODO : 리터럴 타입으로도 가능한지?
+    type pokemonList = "피카츄" | "라이츄" | "파이리";
+    const [pokemonList1, setPokemonList1] = useState<pokemonList[]>(["피카츄", "라이츄", "파이리"]); 
 }
