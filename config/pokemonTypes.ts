@@ -167,6 +167,7 @@ export const POKEMON_TYPES = {
 };
 
 // 2026.04.08 add
+// 타입 이름으로 설정을 가져오는 헬퍼 함수
 export type PokemonTypeKey = keyof typeof POKEMON_TYPES;
 export const getTypeConfig = (typeName: PokemonTypeKey) =>
 {
@@ -174,6 +175,7 @@ export const getTypeConfig = (typeName: PokemonTypeKey) =>
 }
 
 // 2026.04.09
+// 모든 타입 이름 배열 반환
 export const getAllTypeNames = () => 
 {
   return Object.keys(POKEMON_TYPES)

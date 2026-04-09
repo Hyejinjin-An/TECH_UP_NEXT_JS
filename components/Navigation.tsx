@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { FaMoon, FaSun } from "react-icons/fa6";
+import Link from "next/link";
 
 export function Navigation() 
 {
@@ -20,8 +21,15 @@ export function Navigation()
       <div className="container flex h-20 max-w-screen-2xl justify-between items-center">
         
         <div className="flex gap-4 text-2xl">
-          <h2>포켓몬 도감</h2>
-          <h2>About</h2>
+          <Link href="/">
+            <h2>포켓몬 도감</h2>
+          </Link>
+          <Link href="/about">
+            <h2>About</h2>
+          </Link>
+          <Link href="/about/details">
+            <h2>Details</h2>
+          </Link>
         </div>
         
         <div className="flex gap-4">

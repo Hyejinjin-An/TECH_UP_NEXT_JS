@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NextThemeProvider } from "@/components/ThemeProvider";
 import { Navigation } from "@/components/Navigation";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -35,15 +36,17 @@ export default function RootLayout({
     >
       {/* className="dark" 추가하면 다크모드 적용 */}
       <body className="dark min-h-full flex flex-col">
-        <NextThemeProvider
-          attribute="class"
+        {/* <NextThemeProvider */}
+        <ThemeProvider
+          attribute="class" // 테마를 <html> 태그의 class 속성으로 적용 - tailwind방식  (dark, light 등)
           defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          enableSystem // 브라우저/OS의 다크모드 설정을 감지해서 테마 변경 허용
+          disableTransitionOnChange // 테마 전환 시 CSS transition 비활성화로 깜빡임 없이 즉시 변경 - 자식에게 transition이 있어도 무시
         >
           <Navigation />
           {children}
-        </NextThemeProvider>
+        </ThemeProvider>
+        {/* </NextThemeProvider> */}
       </body>
     </html>
   );
