@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { FaMoon, FaSun } from "react-icons/fa6";
 import Link from "next/link";
+import LoginButton from "./LoginButton";
 
 export function Navigation() 
 {
@@ -33,7 +34,9 @@ export function Navigation()
         </div>
         
         <div className="flex gap-4">
-          {mounted &&
+          {mounted && 
+          <>
+            <LoginButton /> 
             <Button
               variant="ghost"
               size="icon"
@@ -45,6 +48,7 @@ export function Navigation()
                 <FaMoon className="text-yellow-500"/>
               )}
             </Button>
+          </>
           }
         </div>
 
