@@ -6,6 +6,7 @@ import { NextThemeProvider } from "@/components/ThemeProvider";
 import { Navigation } from "@/components/Navigation";
 import { ThemeProvider } from "next-themes";
 import AuthProvider from "@/components/AuthProvider";
+import { UserInfoProvider } from "@/contexts/UserInfoContext";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -45,8 +46,11 @@ export default function RootLayout({
           disableTransitionOnChange // 테마 전환 시 CSS transition 비활성화로 깜빡임 없이 즉시 변경 - 자식에게 transition이 있어도 무시
         >
           <AuthProvider>
-            <Navigation />
-            {children}
+            {/* favorites 추가 */}
+            <UserInfoProvider>
+              <Navigation />
+              {children}
+            </UserInfoProvider>
           </AuthProvider>
         </ThemeProvider>
         {/* </NextThemeProvider> */}

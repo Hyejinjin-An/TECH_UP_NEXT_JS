@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 // 포켓몬API를 fetch로 가져오기.
 export interface PokemonProps
 {
+    id: number; // 2026.04.13 add
     name: string,
     koName: string,
     types: PokemonTypeKey[],
@@ -23,7 +24,7 @@ export async function getPokemon(id:string): Promise<PokemonProps>
         }
 
 
-        console.log(`${id}번 포켓몬 API 호출`)
+        // console.log(`${id}번 포켓몬 API 호출`)
         const [res, speciesRes] = await Promise.all([
             fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
                 next:{revalidate:3600} 
@@ -51,6 +52,7 @@ export async function getPokemon(id:string): Promise<PokemonProps>
 
         const result = 
         {
+            id: data.id,    // 2026.04.13 add
             name: data.name,
             koName: speciesData.names.find( (n:{language: {name: string}}) => n.language.name === 'ko' )?.name,
             types: data.types?.map( (t:{type: {name: string}}) => t.type.name ),
