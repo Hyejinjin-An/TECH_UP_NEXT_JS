@@ -3,18 +3,25 @@ import { PokemonSkeleton } from "@/components/PokemonCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { getPokemon } from "@/lib/poketAPI";
 import { cn } from "@/lib/utils";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 async function PokemonItem( {id}:{id: string} ) 
 {
-  await new Promise( r => setTimeout(r, 2000));
+  // await new Promise( r => setTimeout(r, 2000));
   const pokemon = await getPokemon(String(id))
   return (
     <PokemonCard id={String(id)} pokemon={pokemon} />
   )  
 }
 
-export default async function Home() 
+// 2026.04.13 add
+// 페이징처리를 위한 데이터 설정
+const ITEMS_PER_PAGE = 12;
+const TOTAL_POKEMON = 151;
+
+// export default async function Home() 
+export default async function Home( {searchParams}: {searchParams:Promise<{page?: string}>}) 
 {
   // const [activate, setActivate] = useState(false)
   // const radiusLevels = ["rounded-sm", "rounded-md", "rounded-lg", "rounded-full"];
@@ -23,6 +30,32 @@ export default async function Home()
   // const pokemons = await Promise.all(
   //   Array.from({length:30}, (_,i) => { return getPokemon(String(i+1)) })
   // )
+
+  // 2026.04.13 add start
+  const params = await searchParams;
+  const currentPage = Number(params.page);
+  const totalPages = Math.ceil(TOTAL_POKEMON / ITEMS_PER_PAGE)  // ceil : 올림
+  console.log(`현재 페이지: ${currentPage}`)
+
+  // 페이징 처리 중 에러발생 시 1페이지로 돌려보냄
+  if (isNaN(currentPage) || currentPage < 1)
+  {
+    // next/navigation 에서 import하기
+    redirect('/?page=1')
+  }
+
+  // 제일 끝 페이지보다 큰 숫자가 들어온 경우 
+  if (currentPage > totalPages)
+  {
+    // 제일 끝 페이지로 이동
+    redirect(`/?page=${totalPages}`)
+  }
+
+  // pokemonId (포켓몬 카드 index)
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  // 페이지 이동 시 보여줄 포켓몬 카드 index ? Math.min()?ってなに？
+  const NumOfPokemon = Math.min(ITEMS_PER_PAGE, TOTAL_POKEMON - startIdx);
+  // 2026.04.13 add end
 
   return (
     <main className="w-full mx-auto px-20 py-8">
@@ -54,10 +87,10 @@ export default async function Home()
           })
         } */}
         {
-          Array.from( {length: 30}, (_, i) => {
+          Array.from( {length: NumOfPokemon}, (_, i) => {
             return (
-              <Suspense key={i+1} fallback={<PokemonSkeleton />}>
-                <PokemonItem id={String(i + 1)} />
+              <Suspense key={i + 1 + startIdx} fallback={<PokemonSkeleton />}>
+                <PokemonItem id={String(i + 1 + startIdx)} />
               </Suspense>
             )
           })
