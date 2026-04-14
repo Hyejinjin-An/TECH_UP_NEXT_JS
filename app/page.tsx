@@ -1,5 +1,6 @@
 import PokemonCard from "@/components/PokemonCard";
 import { PokemonSkeleton } from "@/components/PokemonCardSkeleton";
+import { PokemonPagination } from "@/components/PokemonPagination";
 import { Button } from "@/components/ui/button";
 import { getPokemon } from "@/lib/poketAPI";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,8 @@ async function PokemonItem( {id}:{id: string} )
 // 2026.04.13 add
 // 페이징처리를 위한 데이터 설정
 const ITEMS_PER_PAGE = 12;
-const TOTAL_POKEMON = 151;
+// const TOTAL_POKEMON = 151;
+const TOTAL_POKEMON = 1025;
 
 // export default async function Home() 
 export default async function Home( {searchParams}: {searchParams:Promise<{page?: string}>}) 
@@ -58,7 +60,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
   // 2026.04.13 add end
 
   return (
-    <main className="w-full mx-auto px-20 py-8">
+    <main className="w-full h-full mx-auto px-20 py-8">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
         {/* <Button
           onClick={ () => 
@@ -96,6 +98,15 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
           })
         }
       </div>
+
+      {/* pagination 추가 */}
+      <div className="flex justify-center py-6">
+        <PokemonPagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      </div>
+
     </main>
   );
 }

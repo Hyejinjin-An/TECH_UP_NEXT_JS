@@ -35,8 +35,8 @@ export default function PokemonCard( {id, pokemon}: {id: string, pokemon: Pokemo
     // 로그인 정보가 있으면 찜목록 추가 관련 모달 호출
     function handleStarClick(e: React.MouseEvent)
     {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault();     // 브라우저 기본 동작 막기 1. <a> → 링크 이동 2. <form> → 제출 + 새로고침 3. <input type="checkbox"> → 체크됨
+        e.stopPropagation();    // 이벤트 버블링(전파)을 막는 함수, 이벤트가 부모로 올라가는 것 막음
 
         if(!session)
         {
@@ -59,7 +59,7 @@ export default function PokemonCard( {id, pokemon}: {id: string, pokemon: Pokemo
                     "transition-all",
                     "duration-200",
                     "hover:cursor-pointer",
-                    "ring-2",
+                    "ring-3!",
                     typeConfig.ringClass
                 )}
             >
@@ -84,23 +84,23 @@ export default function PokemonCard( {id, pokemon}: {id: string, pokemon: Pokemo
                     </Button>
                     {/* 좋아요 버튼 추가 end */}
                     <CardTitle>
-                        {`${pokemon?.koName}{${pokemon?.name}`}
+                        {`${pokemon?.koName} (${pokemon?.name})`}
                     </CardTitle>
-                    <CardContent>
-                        <div className="flex justify-center gap-2">
-                            {pokemon?.types.map( (t, i) => <TypeBadge key={i} typeName={t} /> )}
-                        </div>
-                        <Image 
-                            src={pokemon?.image} 
-                            alt={pokemon?.name} 
-                            width={100} 
-                            height={100}
-                            className="w-full h-full"
-                            priority
-                        />
-                    </CardContent>
                 </CardHeader>
 
+                <CardContent>
+                    <div className="flex justify-center gap-2">
+                        {pokemon?.types.map( (t, i) => <TypeBadge key={i} typeName={t} /> )}
+                    </div>
+                    <Image 
+                        src={pokemon?.image} 
+                        alt={pokemon?.name} 
+                        width={100} 
+                        height={100}
+                        className="w-full h-full"
+                        priority
+                    />
+                </CardContent>
             </Card>
         </Link>
 

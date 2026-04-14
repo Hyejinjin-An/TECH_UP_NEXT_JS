@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { DM_Sans, Geist, Geist_Mono, Inter, Raleway } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NextThemeProvider } from "@/components/ThemeProvider";
@@ -9,6 +9,8 @@ import AuthProvider from "@/components/AuthProvider";
 import { UserInfoProvider } from "@/contexts/UserInfoContext";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const dmSansHeading = DM_Sans({subsets:['latin'],variable:'--font-heading'});
+const raleway = Raleway({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,11 +35,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", raleway.variable, dmSansHeading.variable)}
       suppressHydrationWarning
     >
       {/* className="dark" 추가하면 다크모드 적용 */}
-      <body className="dark min-h-full flex flex-col">
+      <body className="dark min-h-full flex flex-col" suppressHydrationWarning>
         {/* <NextThemeProvider */}
         <ThemeProvider
           attribute="class" // 테마를 <html> 태그의 class 속성으로 적용 - tailwind방식  (dark, light 등)
