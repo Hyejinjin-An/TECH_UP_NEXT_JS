@@ -1,8 +1,9 @@
 import PokemonCard from "@/components/PokemonCard";
 import { PokemonSkeleton } from "@/components/PokemonCardSkeleton";
 import { PokemonPagination } from "@/components/PokemonPagination";
+import TypeFilter from "@/components/TypeFilter";
 import { Button } from "@/components/ui/button";
-import { getPokemon } from "@/lib/poketAPI";
+import { getPokemon, getPokemonByTypes } from "@/lib/poketAPI";
 import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -10,9 +11,9 @@ import { Suspense } from "react";
 async function PokemonItem( {id}:{id: string} ) 
 {
   // await new Promise( r => setTimeout(r, 2000));
-  const pokemon = await getPokemon(String(id))
+  const pokemon = await getPokemon(id)
   return (
-    <PokemonCard id={String(id)} pokemon={pokemon} />
+    <PokemonCard id={id} pokemon={pokemon} />
   )  
 }
 
@@ -23,7 +24,7 @@ const ITEMS_PER_PAGE = 12;
 const TOTAL_POKEMON = 1025;
 
 // export default async function Home() 
-export default async function Home( {searchParams}: {searchParams:Promise<{page?: string}>}) 
+export default async function Home( {searchParams}: {searchParams:Promise<{page?: string, type?: string}>}) 
 {
   // const [activate, setActivate] = useState(false)
   // const radiusLevels = ["rounded-sm", "rounded-md", "rounded-lg", "rounded-full"];
@@ -33,10 +34,10 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
   //   Array.from({length:30}, (_,i) => { return getPokemon(String(i+1)) })
   // )
 
-  // 2026.04.13 add start
+  // 2026.04.13~14 add start
   const params = await searchParams;
   const currentPage = Number(params.page);
-  const totalPages = Math.ceil(TOTAL_POKEMON / ITEMS_PER_PAGE)  // ceil : 올림
+  // const totalPages = Math.ceil(TOTAL_POKEMON / ITEMS_PER_PAGE)  // ceil : 올림
   console.log(`현재 페이지: ${currentPage}`)
 
   // 페이징 처리 중 에러발생 시 1페이지로 돌려보냄
@@ -46,21 +47,41 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
     redirect('/?page=1')
   }
 
-  // 제일 끝 페이지보다 큰 숫자가 들어온 경우 
-  if (currentPage > totalPages)
+  // 타입 filter 적용을 위해 유, 무 파악 변수 
+  const selectedTypes = params.type ? params.type.split(',') : [];
+  let pokemonIds: number[];
+  if(selectedTypes.length > 0)
   {
-    // 제일 끝 페이지로 이동
-    redirect(`/?page=${totalPages}`)
+    // 선택된 해당 타입만 보여줌
+    pokemonIds = await getPokemonByTypes(selectedTypes);
   }
+  else
+  {
+    // 모든 타입 보여줌
+    pokemonIds = Array.from( {length: TOTAL_POKEMON}, (_, i) => i + 1 );
+  }
+  const totalPages = Math.ceil(pokemonIds.length / ITEMS_PER_PAGE);
+  const validPage = Math.min(currentPage, totalPages);
+
+
+  // 제일 끝 페이지보다 큰 숫자가 들어온 경우 제일 끝 페이지로 이동
+  // if (currentPage > totalPages) redirect(`/?page=${totalPages}`)
 
   // pokemonId (포켓몬 카드 index)
-  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  // const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const startIdx = (validPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const displayIdx = pokemonIds.slice(startIdx, endIdx);
+
   // 페이지 이동 시 보여줄 포켓몬 카드 index ? Math.min()?ってなに？
-  const NumOfPokemon = Math.min(ITEMS_PER_PAGE, TOTAL_POKEMON - startIdx);
-  // 2026.04.13 add end
+  // const NumOfPokemon = Math.min(ITEMS_PER_PAGE, TOTAL_POKEMON - startIdx);
+  // 2026.04.13~14 add end
 
   return (
     <main className="w-full h-full mx-auto px-20 py-8">
+      {/* 2026.04.14 typeFIlter 추가 */}
+      <TypeFilter />
+      {/* 2026.04.14 typeFIlter 추가 */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
         {/* <Button
           onClick={ () => 
@@ -88,7 +109,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
             return <PokemonCard key={i} id={String(i+1)} pokemon={pokemon} />
           })
         } */}
-        {
+        {/* {
           Array.from( {length: NumOfPokemon}, (_, i) => {
             return (
               <Suspense key={i + 1 + startIdx} fallback={<PokemonSkeleton />}>
@@ -96,6 +117,17 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
               </Suspense>
             )
           })
+        } */}
+        {
+          displayIdx.length > 0 ? (
+            displayIdx.map( id => {
+              return (
+                <Suspense key={id} fallback={<PokemonSkeleton />}>
+                  <PokemonItem id={String(id)} />
+                </Suspense>
+              )
+            })
+          ) : ( <div>해당 타입의 모켓몬이 없습니다.</div> )
         }
       </div>
 
@@ -104,6 +136,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
         <PokemonPagination 
           currentPage={currentPage}
           totalPages={totalPages}
+          params={params}
         />
       </div>
 

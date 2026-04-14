@@ -39,7 +39,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       {/* className="dark" 추가하면 다크모드 적용 */}
-      <body className="dark min-h-full flex flex-col" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {/* <NextThemeProvider */}
         <ThemeProvider
           attribute="class" // 테마를 <html> 태그의 class 속성으로 적용 - tailwind방식  (dark, light 등)

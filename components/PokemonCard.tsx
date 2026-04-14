@@ -11,9 +11,9 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useUserInfo } from "@/contexts/UserInfoContext";
 import { useSession } from "next-auth/react";
-import { Button } from "./ui/button";
 import { FaStar } from "react-icons/fa6";
 import FavoriteDialog from "./FavoriteDialog";
+import { Button } from "@base-ui/react";
 
 // 포켓몬 카드 1장에 대한 tsx 파일
 export default function PokemonCard( {id, pokemon}: {id: string, pokemon: PokemonProps} )

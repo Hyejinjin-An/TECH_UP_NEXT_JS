@@ -178,5 +178,6 @@ export const getTypeConfig = (typeName: PokemonTypeKey) =>
 // 모든 타입 이름 배열 반환
 export const getAllTypeNames = () => 
 {
-  return Object.keys(POKEMON_TYPES)
+  // 2026.04.14 add 타입필터
+  return Object.keys(POKEMON_TYPES) as PokemonTypeKey[]
 }

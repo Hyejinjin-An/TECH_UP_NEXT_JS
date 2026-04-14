@@ -12,9 +12,16 @@ import {
 // 페이징 처리 시 10개까지만 보일 수 있도록 초기값 설정
 const PAGE_GROUP_SIZE = 10;
 
+interface PokemonPaginationProps
+{
+  currentPage: number;
+  totalPages: number;
+  params: Record<string, string>;
+}
+
 export function PokemonPagination
 (
-    {currentPage, totalPages}: {currentPage: number, totalPages: number}
+    {currentPage, totalPages, params}: PokemonPaginationProps
 ) 
 {
   const currentGroup = Math.floor( (currentPage-1) / PAGE_GROUP_SIZE );
@@ -27,12 +34,19 @@ export function PokemonPagination
   const prevGroupPage = startPage -1;
   const nextGroupPage = endPage +1;
 
+  const buildPageUrl = (page: number) => 
+    {
+      const urlParams = new URLSearchParams(params as Record<string, string>);
+      urlParams.set('page', page.toString());
+      return `/?${urlParams.toString()}`
+    }
+
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious 
-            href={currentPage > 1 ? `/?page=${prevGroupPage}` : undefined} 
+            href={currentPage > 1 ? buildPageUrl(prevGroupPage) : undefined} 
             className={!hasPrevGroup ? 'invisible' : ''}
             />
         </PaginationItem>
@@ -43,7 +57,7 @@ export function PokemonPagination
                 return (
                     <PaginationItem key={pageNum}>
                         <PaginationLink 
-                            href={`/?page=${pageNum}`} 
+                            href={buildPageUrl(pageNum)} 
                             isActive={currentPage === pageNum}
                         >
                             {pageNum}
@@ -55,7 +69,7 @@ export function PokemonPagination
        
         <PaginationItem>
           <PaginationNext 
-            href={currentPage < totalPages ? `/?page=${nextGroupPage}` : undefined} 
+            href={currentPage < totalPages ? buildPageUrl(nextGroupPage) : undefined} 
             className={!hasNextGroup ? 'invisible' : ''} 
             />
         </PaginationItem>
