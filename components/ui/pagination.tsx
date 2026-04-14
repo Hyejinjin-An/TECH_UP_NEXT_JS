@@ -45,22 +45,16 @@ function PaginationLink({
   ...props
 }: PaginationLinkProps) {
   return (
-    <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
-          data-active={isActive}
-          {...props}
-          // 2026.04.14 add
-          className={cn(buttonVariants({variant: isActive ? "outline" : "ghost", size}), className)}
-        />
-      }
-    />
+    // 2026.04.14 bug fix
+    // <Button> 태그 속 render a태그 -> button 태그 삭제 후 랜더만 return
+      <a
+        aria-current={isActive ? "page" : undefined}
+        data-slot="pagination-link"
+        data-active={isActive}
+        // 2026.04.14 add
+        className={cn(buttonVariants({variant: isActive ? "outline" : "ghost", size}), className)}
+        {...props}
+      ></a>
   )
 }
 
