@@ -2,6 +2,7 @@
 // npx shadcn@latest add alert-dialog
 import { useUserInfo } from "@/contexts/UserInfoContext";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
+import { useUserStore } from "@/store/useStore";
 
 interface favoritesProps
 {
@@ -15,7 +16,12 @@ export default function FavoriteDialog(
     // param 타입 설정
     { open, onOpenChange, pokemonId, pokemonName }: favoritesProps )
 {
-    const { favorites, setFavorites } = useUserInfo();
+    // 2026.04.15 add
+    const favorites = useUserStore( (state) => state.favorites );
+    const addFavorite = useUserStore( (state) => state.addFavorite );
+    const removeFavorite = useUserStore( (state) => state.removeFavorite );
+
+    // const { favorites, setFavorites } = useUserInfo();
     // 이미 좋아요 클릭해서 db에 저장되어있는지 확인?
     const isFavorited = favorites.includes(pokemonId); 
 
@@ -27,7 +33,8 @@ export default function FavoriteDialog(
             // method를 설정해주지 않으면 제일 위에 있는 것으로 실행됨
             await fetch(`/api/favorites?pokemon_id=${pokemonId}`, {method: "DELETE"})
             // 해당 param과 다른 리스트를 보여주기 위해 재설정 setFavorites()
-            setFavorites( (prev) => prev.filter( id => id !== pokemonId ) )
+            // setFavorites( (prev) => prev.filter( id => id !== pokemonId ) )
+            removeFavorite(pokemonId);
         }
         else
         {
@@ -38,7 +45,8 @@ export default function FavoriteDialog(
                     headers: {'Content-Type': 'application/json'}, 
                     body: JSON.stringify( {pokemon_id: pokemonId} )
                 });
-            setFavorites( [...favorites, pokemonId] )
+            // setFavorites( [...favorites, pokemonId] )
+            addFavorite(pokemonId);
         }
 
         onOpenChange(false); // 창닫기

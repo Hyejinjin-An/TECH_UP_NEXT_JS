@@ -61,5 +61,5 @@ export default function LoginButton()
         )
     }
   
-  return <Button onClick={() => signIn()}>로그인</Button>
+  return <Button onClick={() => signIn(undefined, {callbackUrl: '/'})}>로그인</Button>
 }

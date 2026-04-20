@@ -6,17 +6,26 @@ import { Button } from "./ui/button";
 import { FaMoon, FaSun } from "react-icons/fa6";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
+import { useSession } from "next-auth/react";
+import { useUserStore } from "@/store/useStore";
 
 export function Navigation() 
 {
   const {theme, setTheme} = useTheme();
   const [mounted, setMounted] = useState(false);
   
+  // 2026.04.15 add
+  const {data: session} = useSession();
+  const loadFavorites = useUserStore( (state) => state.loadFavorites );
+
   useEffect(()=>{
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, []);
   
+  // 2026.04.15 add
+  useEffect( () => { loadFavorites(session) }, [session, loadFavorites])
+
   return (
     <nav className="border-b mx-3">
       <div className="container flex h-20 max-w-screen-2xl justify-between items-center">

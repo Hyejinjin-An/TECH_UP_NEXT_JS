@@ -52,6 +52,10 @@ export const authOption: NextAuthOptions =
             return true;
         },
 
+        // JSON Web Token
+        // 사용자의 로그인 정보를 서버가 토큰 형태로 만들어서 클라이언트에 주고
+        // 클라이언트는 이후 요청마다 이 토큰을 보내서 자신을 증명하는 방식.
+        // jwt 흐름 : 로그인요청 -> 서버검증 후 jwt발급 -> 클라이언트에 전달(localStorage/Cookie) -> 이후 요청마다 jwt토큰 같이 넘김?
         async jwt( {token, user} )
         {
             if(user)

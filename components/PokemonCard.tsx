@@ -14,13 +14,15 @@ import { useSession } from "next-auth/react";
 import { FaStar } from "react-icons/fa6";
 import FavoriteDialog from "./FavoriteDialog";
 import { Button } from "@base-ui/react";
+import { useUserStore } from "@/store/useStore";
 
 // 포켓몬 카드 1장에 대한 tsx 파일
 export default function PokemonCard( {id, pokemon}: {id: string, pokemon: PokemonProps} )
 {
     // 2026.04.13 add (좋아요 버튼 추가 관련+세션정보)
     // start
-    const {favorites, setFavorites} = useUserInfo();
+    // const {favorites, setFavorites} = useUserInfo();
+    const favorites = useUserStore( (state) => state.favorites);
     const [showDialog, setShowDialog] = useState(false);
     const isFavorited = favorites.includes(pokemon.id);
     const {data: session} = useSession();

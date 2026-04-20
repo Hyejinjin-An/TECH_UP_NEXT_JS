@@ -1,5 +1,6 @@
 import PokemonCard from "@/components/PokemonCard";
 import { PokemonSkeleton } from "@/components/PokemonCardSkeleton";
+import PokemonList from "@/components/PokemonList";
 import { PokemonPagination } from "@/components/PokemonPagination";
 import TypeFilter from "@/components/TypeFilter";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,13 @@ import { getPokemon, getPokemonByTypes } from "@/lib/poketAPI";
 import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+
+import type { Metadata } from "next";
+// 2026.04.15 add
+export const metadata: Metadata = {
+  title: "홈 | 포켓몬 도감",
+  description: "포켓몬을 검색해 보세요",
+};
 
 async function PokemonItem( {id}:{id: string} ) 
 {
@@ -23,6 +31,7 @@ const ITEMS_PER_PAGE = 12;
 // const TOTAL_POKEMON = 151;
 const TOTAL_POKEMON = 1025;
 
+
 // export default async function Home() 
 export default async function Home( {searchParams}: {searchParams:Promise<{page?: string, type?: string}>}) 
 {
@@ -38,7 +47,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
   const params = await searchParams;
   const currentPage = Number(params.page);
   // const totalPages = Math.ceil(TOTAL_POKEMON / ITEMS_PER_PAGE)  // ceil : 올림
-  console.log(`현재 페이지: ${currentPage}`)
+  // console.log(`현재 페이지: ${currentPage}`)
 
   // 페이징 처리 중 에러발생 시 1페이지로 돌려보냄
   if (isNaN(currentPage) || currentPage < 1)
@@ -82,6 +91,9 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
       {/* 2026.04.14 typeFIlter 추가 */}
       <TypeFilter />
       {/* 2026.04.14 typeFIlter 추가 */}
+      {/* 2026.04.15 list 추가*/}
+      {/* <PokemonList currentPage={currentPage} /> */}
+      {/* 2026.04.15 list 추가*/}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
         {/* <Button
           onClick={ () => 

@@ -5,41 +5,50 @@ import { useState } from "react";
 import TypeBadge from "./TypeBadge";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { Button } from "@base-ui/react";
+import { usePokeTypeStore } from "@/store/pokeTypeStore";
+
 export default function TypeFilter()
 {
     // const [selectedTypes, setSelectedTypes] = useState<PokemonTypeKey[]>([]);
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const typeParams = searchParams.get('type');
-    const selectedTypes = typeParams ? typeParams.split(',') : [];
+    // const typeParams = searchParams.get('type');
+    // const selectedTypes = typeParams ? typeParams.split(',') : [];
+
+    // 2026.04.15 add
+    const {selectedTypes, toggleType, resetTypes} = usePokeTypeStore();
 
     const handleClick = (type: PokemonTypeKey) =>
     {
+        // const params = new URLSearchParams(searchParams.toString());
+
+        // let newSelectedTypes: string[];
+        // if(selectedTypes.includes(type))
+        // {
+        //     // 선택된 값에서 취소
+        //     newSelectedTypes = selectedTypes.filter( t => t !== type );
+        //     // setSelectedTypes( (prev) => prev.filter( t => t !== type ) )
+        // }
+        // else
+        // {
+        //     // 선택
+        //     newSelectedTypes = [...selectedTypes, type];
+        //     //  setSelectedTypes( prev => [...prev, type] )
+        // }
+
+        // if(newSelectedTypes.length === 0)
+        // {
+        //     params.delete('type');
+        // }
+        // else
+        // {
+        //     params.set('type', newSelectedTypes.join(','));
+        // }
+
+        toggleType(type);
         const params = new URLSearchParams(searchParams.toString());
-
-        let newSelectedTypes: string[];
-        if(selectedTypes.includes(type))
-        {
-            // 선택된 값에서 취소
-            newSelectedTypes = selectedTypes.filter( t => t !== type );
-            // setSelectedTypes( (prev) => prev.filter( t => t !== type ) )
-        }
-        else
-        {
-            // 선택
-            newSelectedTypes = [...selectedTypes, type];
-            //  setSelectedTypes( prev => [...prev, type] )
-        }
-
-        if(newSelectedTypes.length === 0)
-        {
-            params.delete('type');
-        }
-        else
-        {
-            params.set('type', newSelectedTypes.join(','));
-        }
 
         params.set('page', '1');
         router.push(`/?${params.toString()}`)   // redirect == push
@@ -62,7 +71,13 @@ export default function TypeFilter()
                         })
                     }
                 </div>
-
+                {/* 2026.04.15 초기화 버튼 추가 */}
+                <Button
+                    onClick={ () => resetTypes() }
+                    disabled={ selectedTypes.length ===0 }
+                >
+                    초기화
+                </Button>
             </div>
         </div>
     )
