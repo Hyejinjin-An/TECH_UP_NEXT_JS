@@ -38,6 +38,7 @@ export default function PokemonList( {currentPage}: {currentPage: number} )
                     setPokemonIds(Array.from( {length: TOTAL_POKEMON}, (_, i) => i + 1 ))
                 }
             }
+            fetchIds()
         }, [selectedTypes]
     )
 

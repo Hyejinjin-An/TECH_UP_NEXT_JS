@@ -27,9 +27,9 @@ async function PokemonItem( {id}:{id: string} )
 
 // 2026.04.13 add
 // 페이징처리를 위한 데이터 설정
-const ITEMS_PER_PAGE = 12;
+// const ITEMS_PER_PAGE = 12;
 // const TOTAL_POKEMON = 151;
-const TOTAL_POKEMON = 1025;
+// const TOTAL_POKEMON = 1025;
 
 
 // export default async function Home() 
@@ -94,7 +94,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
       {/* 2026.04.15 list 추가*/}
       {/* <PokemonList currentPage={currentPage} /> */}
       {/* 2026.04.15 list 추가*/}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
+      {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
         {/* <Button
           onClick={ () => 
             {
@@ -130,7 +130,7 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
             )
           })
         } */}
-        {
+        {/* {
           displayIdx.length > 0 ? (
             displayIdx.map( id => {
               return (
@@ -141,17 +141,17 @@ export default async function Home( {searchParams}: {searchParams:Promise<{page?
             })
           ) : ( <div>해당 타입의 모켓몬이 없습니다.</div> )
         }
-      </div>
+      </div> */}
 
       {/* pagination 추가 */}
-      <div className="flex justify-center py-6">
+      {/* <div className="flex justify-center py-6">
         <PokemonPagination 
           currentPage={currentPage}
           totalPages={totalPages}
           params={params}
         />
-      </div>
-
+      </div>  */}
+        <PokemonList currentPage={currentPage} />
     </main>
   );
 }
